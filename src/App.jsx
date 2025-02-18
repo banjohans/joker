@@ -167,7 +167,7 @@ export default function NumberGame() {
       <div className="game-container">
         <div className="game-wrapper">
           <button className="reset-button" onClick={resetGame}>
-            Reset Game
+            New Game
           </button>
           <h1 className="game-title">
             <img src="./jester.png" width={125} height={70} alt="Jester" />
