@@ -101,6 +101,7 @@ body {
 .surprise-box {
   background-color: #ffd700 !important;
   background-image: url("/jester.png");
+  z-index: 10;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

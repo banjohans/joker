@@ -39,6 +39,7 @@ export default function NumberGame() {
     position: Math.random() < 0.5 ? "over" : "under",
   });
   const prizeListRef = useRef(null);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (prizeListRef.current) {
@@ -54,6 +55,7 @@ export default function NumberGame() {
 
     if (index === surpriseBox.index && position === surpriseBox.position) {
       setCurrentPrizeIndex(prizeList.length - 1);
+      setGameOver(true);
       setRevealed((prev) => {
         const newRevealed = [...prev];
         newRevealed[index] = { over: true, under: true };
@@ -119,7 +121,7 @@ export default function NumberGame() {
                     : ""
                 } ${revealed[index].under ? "inactive" : ""}`}
                 onClick={
-                  !revealed[index].under
+                  !gameOver && !revealed[index].under
                     ? () => handleGuess(index, "over")
                     : undefined
                 }
@@ -138,7 +140,7 @@ export default function NumberGame() {
                     : ""
                 } ${revealed[index].over ? "inactive" : ""}`}
                 onClick={
-                  !revealed[index].over
+                  !gameOver && !revealed[index].over
                     ? () => handleGuess(index, "under")
                     : undefined
                 }
