@@ -1,11 +1,31 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   text-align: center;
-  padding: 20px;
   font-family: Arial, sans-serif;
 }
 
+.game-wrapper {
+  padding: 20px;
+  background-color: #101010;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
 .game-title {
-  font-size: 24px;
+  font-size: 3rem;
   margin-bottom: 20px;
 }
 
@@ -54,11 +74,15 @@
 }
 
 .correct {
-  background-color: green !important;
-  color: white;
+  border: 6px solid green;
+  background-color: white !important;
+  color: black;
+  box-sizing: border-box;
 }
 
 .wrong {
-  background-color: red !important;
-  color: white;
+  border: 6px solid red;
+  background-color: white !important;
+  color: black;
+  box-sizing: border-box;
 }
