@@ -150,8 +150,8 @@ export default function NumberGame() {
     if (isCorrect && currentPrizeIndex < prizeList.length - 1) {
       playRightSound();
       setCurrentPrizeIndex((prev) => prev + 1);
-    } else if (!isCorrect && currentPrizeIndex > 0) {
-      playWrongSound();
+    } else playWrongSound();
+    if (!isCorrect && currentPrizeIndex > 0) {
       setCurrentPrizeIndex((prev) => prev - 1);
     }
   };
@@ -167,7 +167,7 @@ export default function NumberGame() {
       <div className="game-container">
         <div className="game-wrapper">
           <button className="reset-button" onClick={resetGame}>
-            New Game
+            New
           </button>
           <h1 className="game-title">
             <img src="./jester.png" width={125} height={70} alt="Jester" />
