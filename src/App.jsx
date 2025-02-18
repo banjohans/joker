@@ -13,7 +13,7 @@ const generateHiddenNumbers = (numbers) => {
 };
 
 const generatePrizeList = () => {
-  let baseAmount = Math.floor(Math.random() * (500000 - 350000 + 1)) + 350000;
+  let baseAmount = Math.floor(Math.random() * 100000);
   let prizes = Array.from({ length: 6 }, () => {
     baseAmount += Math.floor(Math.random() * (800000 - 300000 + 1)) + 300000;
     return baseAmount;
@@ -76,7 +76,11 @@ export default function NumberGame() {
   return (
     <div className="game-container">
       <div className="game-wrapper">
-        <h1 className="game-title">Joker</h1>
+        <h1 className="game-title">
+          <img src="./jester.png" width={125} height={70} alt="Jester" />
+          <br />
+          Joker
+        </h1>
         <div className="game-grid">
           {numbers.map((num, index) => (
             <div key={index} className="game-column">
@@ -109,7 +113,7 @@ export default function NumberGame() {
           ))}
         </div>
         <div className="game-score">
-          Gjeldende pengesum: {prizeList[currentPrizeIndex].toLocaleString()} kr
+          Premie: {prizeList[currentPrizeIndex].toLocaleString()} kr
         </div>
         <br />
         <div className="prize-list">

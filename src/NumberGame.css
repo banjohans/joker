@@ -26,7 +26,7 @@ body {
 
 .game-title {
   font-size: 3rem;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .game-grid {
@@ -69,6 +69,9 @@ body {
 
 .game-score {
   margin-top: 20px;
+  border-radius: 50px;
+  background-color: #1f0780;
+  color: #ffd700;
   font-size: 20px;
   font-weight: bold;
 }
@@ -85,4 +88,17 @@ body {
   background-color: white !important;
   color: black;
   box-sizing: border-box;
+}
+
+.prize-box {
+  background-color: none;
+}
+
+.active-prize {
+  display: inline-block;
+  border-radius: 50px;
+  background-color: #1f0780;
+  color: #ffd700;
+  padding-left: 30px;
+  padding-right: 30px;
 }
