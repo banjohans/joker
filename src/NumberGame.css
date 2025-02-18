@@ -206,20 +206,25 @@ body {
   background-color: #cc0000;
 }
 
-.sound-button {
+.play-button {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #ffcc00;
-  color: black;
+  top: 50px;
+  right: 10px;
+  background-color: #1f0780;
+  color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s;
 }
 
-.sound-button:hover {
-  background-color: #ffaa00;
+.play-button:hover {
+  background-color: #cc0000;
+}
+
+.play-button.playing {
+  background-color: green;
+  cursor: default;
 }

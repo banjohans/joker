@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./NumberGame.css";
+import vignet from "./assets/jokervignet.mp3";
+import rightSound from "./assets/riktig.mp3";
+import wrongSound from "./assets/feil.mp3";
+import surpriseSound from "./assets/surprise.mp3";
 
 const generateNumbers = () => {
   return Array.from({ length: 5 }, () => Math.floor(Math.random() * 9) + 1);
@@ -22,8 +26,32 @@ const generatePrizeList = () => {
 };
 
 export default function NumberGame() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const playRightSound = () => {
+    const audio = new Audio(rightSound);
+    audio.play().catch((err) => console.log("Audio blocked:", err));
+  };
 
+  const playWrongSound = () => {
+    const audio = new Audio(wrongSound);
+    audio.play().catch((err) => console.log("Audio blocked:", err));
+  };
+
+  const playSurpriseSound = () => {
+    const audio = new Audio(surpriseSound);
+    audio.play().catch((err) => console.log("Audio blocked:", err));
+  };
+
+  const playVignet = () => {
+    if (!isPlaying) {
+      const audio = new Audio(vignet);
+      audio.loop = true; // Ensure looping
+      audio
+        .play()
+        .then(() => setIsPlaying(true)) // Update state after play
+        .catch((err) => console.log("Audio blocked:", err));
+    }
+  };
+  const [isPlaying, setIsPlaying] = useState(false);
   const resetGame = () => {
     setNumbers(generateNumbers());
     setHiddenNumbers(generateHiddenNumbers(numbers));
@@ -70,6 +98,7 @@ export default function NumberGame() {
     if (gameOver || revealed[index].over || revealed[index].under) return;
 
     if (index === surpriseBox.index && position === surpriseBox.position) {
+      playSurpriseSound();
       setCurrentPrizeIndex(prizeList.length - 1);
       setGameOver(true); // Disable all further interactions
       setRevealed((prev) => {
@@ -109,30 +138,22 @@ export default function NumberGame() {
     });
 
     if (isCorrect && currentPrizeIndex < prizeList.length - 1) {
+      playRightSound();
       setCurrentPrizeIndex((prev) => prev + 1);
     } else if (!isCorrect && currentPrizeIndex > 0) {
+      playWrongSound();
       setCurrentPrizeIndex((prev) => prev - 1);
     }
   };
 
   return (
-    <>
+    <div>
       <button
-        className="sound-button"
-        onClick={() => {
-          const audio = document.getElementById("background-audio");
-          if (audio) {
-            audio.play();
-            setIsPlaying(true); // Hide button after playing
-          }
-        }}
-        style={{ display: isPlaying ? "none" : "block" }} // Hide when playing
+        className={`play-button ${isPlaying ? "playing" : ""}`}
+        onClick={playVignet}
       >
-        🔊 Turn on Sound
+        {isPlaying ? "Playing..." : "Play Sound"}
       </button>
-      <audio id="background-audio" loop>
-        <source src="/public/jokervignet.mp3" type="audio/mpeg" />
-      </audio>
       <div className="game-container">
         <div className="game-wrapper">
           <button className="reset-button" onClick={resetGame}>
@@ -213,6 +234,6 @@ export default function NumberGame() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
