@@ -26,6 +26,7 @@ const generatePrizeList = () => {
 };
 
 export default function NumberGame() {
+  const vignetAudioRef = useRef(null); // To stop thevignet if you hit jackpot
   const playRightSound = () => {
     const audio = new Audio(rightSound);
     audio.play().catch((err) => console.log("Audio blocked:", err));
@@ -44,10 +45,13 @@ export default function NumberGame() {
   const playVignet = () => {
     if (!isPlaying) {
       const audio = new Audio(vignet);
-      audio.loop = true; // Ensure looping
+      audio.loop = true;
       audio
         .play()
-        .then(() => setIsPlaying(true)) // Update state after play
+        .then(() => {
+          setIsPlaying(true);
+          vignetAudioRef.current = audio; // Store the audio instance
+        })
         .catch((err) => console.log("Audio blocked:", err));
     }
   };
@@ -99,6 +103,12 @@ export default function NumberGame() {
 
     if (index === surpriseBox.index && position === surpriseBox.position) {
       playSurpriseSound();
+      if (vignetAudioRef.current) {
+        vignetAudioRef.current.pause();
+        vignetAudioRef.current.currentTime = 0; // Reset audio position
+      }
+      setIsPlaying(false); // Update state so play button appears again
+
       setCurrentPrizeIndex(prizeList.length - 1);
       setGameOver(true); // Disable all further interactions
       setRevealed((prev) => {
