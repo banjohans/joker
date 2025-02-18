@@ -22,6 +22,8 @@ const generatePrizeList = () => {
 };
 
 export default function NumberGame() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const resetGame = () => {
     setNumbers(generateNumbers());
     setHiddenNumbers(generateHiddenNumbers(numbers));
@@ -114,85 +116,103 @@ export default function NumberGame() {
   };
 
   return (
-    <div className="game-container">
-      <div className="game-wrapper">
-        <button className="reset-button" onClick={resetGame}>
-          Reset Game
-        </button>
-        <h1 className="game-title">
-          <img src="./jester.png" width={125} height={70} alt="Jester" />
-          <br />
-          Joker
-        </h1>
-        <div className="game-grid">
-          {numbers.map((num, index) => (
-            <div key={index} className="game-column">
-              <div
-                className={`game-box ${
-                  index === surpriseBox.index &&
-                  "over" === surpriseBox.position &&
-                  revealed[index].over === "surprise"
-                    ? "surprise-box"
-                    : guessResults[index].over
-                    ? guessResults[index].over
-                    : ""
-                } ${revealed[index].under ? "inactive" : ""}`}
-                onClick={
-                  !gameOver && !revealed[index].under
-                    ? () => handleGuess(index, "over")
-                    : undefined
-                }
-              >
-                {revealed[index].over !== "surprise" && revealed[index].over
-                  ? hiddenNumbers[index].over
-                  : ""}
-              </div>
-              <div className="game-number">{num}</div>
-              <div
-                className={`game-box ${
-                  index === surpriseBox.index &&
-                  "under" === surpriseBox.position &&
-                  revealed[index].under === "surprise"
-                    ? "surprise-box"
-                    : guessResults[index].under
-                    ? guessResults[index].under
-                    : ""
-                } ${revealed[index].over ? "inactive" : ""}`}
-                onClick={
-                  !gameOver && !revealed[index].over
-                    ? () => handleGuess(index, "under")
-                    : undefined
-                }
-              >
-                {revealed[index].under !== "surprise" && revealed[index].under
-                  ? hiddenNumbers[index].under
-                  : ""}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="game-score">
-          Premie: {prizeList[currentPrizeIndex].toLocaleString()} kr
-        </div>
-        <br />
-        <div className="prize-list" ref={prizeListRef}>
-          {prizeList
-            .slice()
-            .reverse()
-            .map((prize, index) => (
-              <div
-                key={index}
-                className={`prize-box ${
-                  prizeList.length - 1 - index === currentPrizeIndex
-                    ? "active-prize"
-                    : ""
-                }`}
-              >
-                {prize.toLocaleString()} kr
+    <>
+      <button
+        className="sound-button"
+        onClick={() => {
+          const audio = document.getElementById("background-audio");
+          if (audio) {
+            audio.play();
+            setIsPlaying(true); // Hide button after playing
+          }
+        }}
+        style={{ display: isPlaying ? "none" : "block" }} // Hide when playing
+      >
+        🔊 Turn on Sound
+      </button>
+      <audio id="background-audio" loop>
+        <source src="/public/jokervignet.mp3" type="audio/mpeg" />
+      </audio>
+      <div className="game-container">
+        <div className="game-wrapper">
+          <button className="reset-button" onClick={resetGame}>
+            Reset Game
+          </button>
+          <h1 className="game-title">
+            <img src="./jester.png" width={125} height={70} alt="Jester" />
+            <br />
+            Joker
+          </h1>
+          <div className="game-grid">
+            {numbers.map((num, index) => (
+              <div key={index} className="game-column">
+                <div
+                  className={`game-box ${
+                    index === surpriseBox.index &&
+                    "over" === surpriseBox.position &&
+                    revealed[index].over === "surprise"
+                      ? "surprise-box"
+                      : guessResults[index].over
+                      ? guessResults[index].over
+                      : ""
+                  } ${revealed[index].under ? "inactive" : ""}`}
+                  onClick={
+                    !gameOver && !revealed[index].under
+                      ? () => handleGuess(index, "over")
+                      : undefined
+                  }
+                >
+                  {revealed[index].over !== "surprise" && revealed[index].over
+                    ? hiddenNumbers[index].over
+                    : ""}
+                </div>
+                <div className="game-number">{num}</div>
+                <div
+                  className={`game-box ${
+                    index === surpriseBox.index &&
+                    "under" === surpriseBox.position &&
+                    revealed[index].under === "surprise"
+                      ? "surprise-box"
+                      : guessResults[index].under
+                      ? guessResults[index].under
+                      : ""
+                  } ${revealed[index].over ? "inactive" : ""}`}
+                  onClick={
+                    !gameOver && !revealed[index].over
+                      ? () => handleGuess(index, "under")
+                      : undefined
+                  }
+                >
+                  {revealed[index].under !== "surprise" && revealed[index].under
+                    ? hiddenNumbers[index].under
+                    : ""}
+                </div>
               </div>
             ))}
+          </div>
+          <div className="game-score">
+            Premie: {prizeList[currentPrizeIndex].toLocaleString()} kr
+          </div>
+          <br />
+          <div className="prize-list" ref={prizeListRef}>
+            {prizeList
+              .slice()
+              .reverse()
+              .map((prize, index) => (
+                <div
+                  key={index}
+                  className={`prize-box ${
+                    prizeList.length - 1 - index === currentPrizeIndex
+                      ? "active-prize"
+                      : ""
+                  }`}
+                >
+                  {prize.toLocaleString()} kr
+                </div>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
