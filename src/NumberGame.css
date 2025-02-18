@@ -37,7 +37,7 @@ body {
 }
 
 .game-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   margin-bottom: 25px;
 }
 
@@ -70,7 +70,7 @@ body {
 }
 
 .game-box:hover {
-  background-color: #b0b0b0;
+  background-color: #2f0daa;
 }
 
 .game-number {
@@ -82,6 +82,7 @@ body {
 .game-score {
   display: inline-block;
   margin-top: 20px;
+  margin-bottom: 20px;
   border-radius: 50px;
   background-color: #1f0780;
   color: #ffd700;
