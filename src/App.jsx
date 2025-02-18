@@ -22,6 +22,20 @@ const generatePrizeList = () => {
 };
 
 export default function NumberGame() {
+  const resetGame = () => {
+    setNumbers(generateNumbers());
+    setHiddenNumbers(generateHiddenNumbers(numbers));
+    setRevealed(Array(5).fill({ over: false, under: false }));
+    setGuessResults(Array(5).fill({ over: null, under: null }));
+    setPrizeList(generatePrizeList());
+    setCurrentPrizeIndex(0);
+    setSurpriseBox({
+      index: Math.floor(Math.random() * 5),
+      position: Math.random() < 0.5 ? "over" : "under",
+    });
+    setGameOver(false);
+  };
+
   const [numbers, setNumbers] = useState(generateNumbers());
   const [hiddenNumbers, setHiddenNumbers] = useState(
     generateHiddenNumbers(numbers)
@@ -38,8 +52,8 @@ export default function NumberGame() {
     index: Math.floor(Math.random() * 5),
     position: Math.random() < 0.5 ? "over" : "under",
   });
-  const prizeListRef = useRef(null);
   const [gameOver, setGameOver] = useState(false);
+  const prizeListRef = useRef(null);
 
   useEffect(() => {
     if (prizeListRef.current) {
@@ -51,14 +65,14 @@ export default function NumberGame() {
   }, [currentPrizeIndex]);
 
   const handleGuess = (index, position) => {
-    if (revealed[index].over || revealed[index].under) return;
+    if (gameOver || revealed[index].over || revealed[index].under) return;
 
     if (index === surpriseBox.index && position === surpriseBox.position) {
       setCurrentPrizeIndex(prizeList.length - 1);
-      setGameOver(true);
+      setGameOver(true); // Disable all further interactions
       setRevealed((prev) => {
         const newRevealed = [...prev];
-        newRevealed[index] = { over: true, under: true };
+        newRevealed[index] = { ...prev[index], [position]: "surprise" }; // Set surprise state
         return newRevealed;
       });
       return;
@@ -102,6 +116,9 @@ export default function NumberGame() {
   return (
     <div className="game-container">
       <div className="game-wrapper">
+        <button className="reset-button" onClick={resetGame}>
+          Reset Game
+        </button>
         <h1 className="game-title">
           <img src="./jester.png" width={125} height={70} alt="Jester" />
           <br />
@@ -114,7 +131,7 @@ export default function NumberGame() {
                 className={`game-box ${
                   index === surpriseBox.index &&
                   "over" === surpriseBox.position &&
-                  revealed[index].over
+                  revealed[index].over === "surprise"
                     ? "surprise-box"
                     : guessResults[index].over
                     ? guessResults[index].over
@@ -126,14 +143,16 @@ export default function NumberGame() {
                     : undefined
                 }
               >
-                {revealed[index].over ? hiddenNumbers[index].over : ""}
+                {revealed[index].over !== "surprise" && revealed[index].over
+                  ? hiddenNumbers[index].over
+                  : ""}
               </div>
               <div className="game-number">{num}</div>
               <div
                 className={`game-box ${
                   index === surpriseBox.index &&
                   "under" === surpriseBox.position &&
-                  revealed[index].under
+                  revealed[index].under === "surprise"
                     ? "surprise-box"
                     : guessResults[index].under
                     ? guessResults[index].under
@@ -145,7 +164,9 @@ export default function NumberGame() {
                     : undefined
                 }
               >
-                {revealed[index].under ? hiddenNumbers[index].under : ""}
+                {revealed[index].under !== "surprise" && revealed[index].under
+                  ? hiddenNumbers[index].under
+                  : ""}
               </div>
             </div>
           ))}
